@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -316,23 +277,23 @@
       <h2>Personajes Principales</h2>
       <ul>
         <li>
-          <img src="Katana-Zero.jpg" alt="Zero" class="character-img">
+          <img src="images/Katana-Zero.jpg" alt="Zero" class="character-img">
           <div><strong>Zero:</strong> El protagonista, un asesino a sueldo con habilidades para manipular el tiempo gracias a la droga Chronos. Sufre de amnesia y traumas de guerra.</div>
         </li>
         <li>
-          <img src="loquito.jpg" alt="El Psiquiatra" class="character-img">
+          <img src="images/loquito.jpg" alt="El Psiquiatra" class="character-img">
           <div><strong>El Psiquiatra:</strong> Un misterioso terapeuta que administra Chronos a Zero y parece saber más sobre su pasado de lo que revela.</div>
         </li>
         <li>
-          <img src="gordo.jpg" alt="V" class="character-img">
+          <img src="images/gordo.jpg" alt="V" class="character-img">
           <div><strong>V:</strong> Un antagonista carismático y sádico, involucrado en el mundo criminal y con conexiones a la conspiración principal.</div>
         </li>
         <li>
-          <img src="tilin 2.jpg" alt="La Niña" class="character-img">
+          <img src="images/tilin 2.jpg" alt="La Niña" class="character-img">
           <div><strong>La Niña:</strong> Una figura enigmática que aparece en visiones de Zero, representando inocencia perdida y trauma.</div>
         </li>
         <li>
-          <img src="tilin1.jpg" alt="El Cliente" class="character-img">
+          <img src="images/tilin1.jpg" alt="El Cliente" class="character-img">
           <div><strong>El Cliente:</strong> La voz anónima que asigna misiones a Zero, manipulándolo para sus propios fines.</div>
         </li>
       </ul>
