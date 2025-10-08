@@ -1,0 +1,427 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Neo-Noir Archive: Katana Zero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+  </script>
+  <style>
+    body {
+      background: #1a0d1a url('background_image.jpg') no-repeat center fixed;
+      background-size: cover;
+      color: #ff0066;
+      font-family: 'Orbitron', monospace;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .container {
+      text-align: center;
+      padding: 50px;
+      max-width: 900px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .menu {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border: 3px solid #00ccff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ccff, inset 0 0 10px #ff0066;
+    }
+    .menu button {
+      background: linear-gradient(45deg, #ff0066, #00ccff);
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-radius: 5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 10px #ff0066, 0 0 20px #00ccff;
+      animation: neonPulse 2s infinite alternate;
+    }
+    .menu button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #00ccff, 0 0 30px #ff0066;
+      animation: glitchHover 0.3s;
+    }
+    @keyframes neonPulse {
+      0% { box-shadow: 0 0 10px #ff0066, 0 0 20px #00ccff; }
+      100% { box-shadow: 0 0 15px #00ccff, 0 0 30px #ff0066; }
+    }
+    @keyframes glitchHover {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-1px, 1px); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(0); }
+    }
+    .section {
+      display: none;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      border: 2px solid #00ccff;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #00ccff;
+      border-radius: 10px;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .section.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hidden-info {
+      display: none;
+      color: #00ff99;
+      position: relative;
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #00ff99;
+      background: rgba(0, 255, 153, 0.1);
+      border-radius: 5px;
+    }
+    .time-stopped .hidden-info {
+      display: block;
+      animation: glitch 0.5s;
+    }
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-1px, 1px); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(0); }
+    }
+    h1 {
+      font-size: 3em;
+      text-shadow: 3px 3px #00ccff, 0 0 25px #ff0066;
+      margin-bottom: 30px;
+      letter-spacing: 3px;
+    }
+    h2 {
+      font-size: 2em;
+      color: #00ccff;
+      text-shadow: 1px 1px #ff0066;
+      margin-bottom: 20px;
+    }
+    p {
+      line-height: 1.6;
+      font-size: 1.1em;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .character-img {
+      width: 80px;
+      height: 80px;
+      border: 2px solid #00ccff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px #00ccff;
+      transition: transform 0.2s;
+    }
+    .character-img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #ff0066;
+    }
+    .audio-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      display: flex;
+      gap: 10px;
+    }
+    .audio-controls button {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+    .neon-sign {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: #00ff99;
+      font-size: 1.5em;
+      text-shadow: 0 0 15px #00ff99;
+      animation: flicker 1.5s infinite alternate;
+    }
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    .cyberpunk-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 204, 255, 0.1), rgba(255, 0, 102, 0.1));
+      pointer-events: none;
+      z-index: 0;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    @media (max-width: 600px) {
+      .menu {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .menu button {
+        width: 100%;
+        padding: 15px;
+      }
+      h1 {
+        font-size: 2em;
+      }
+      .container {
+        padding: 20px;
+      }
+      .character-img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cyberpunk-overlay"></div>
+  <canvas id="rainCanvas"></canvas>
+  <div class="neon-sign">Neon City Archives</div>
+  <div class="audio-controls">
+    <button onclick="toggleMusic()">Play/Pause Música</button>
+    <button onclick="toggleRain()">Play/Pause Lluvia</button>
+  </div>
+  <div class="container">
+    <h1>Katana Zero: Neon Archive</h1>
+    <div class="menu">
+      <button onclick="showSection('history')">Historia</button>
+      <button onclick="showSection('characters')">Personajes</button>
+      <button onclick="showSection('secrets')">Secretos</button>
+    </div>
+    
+    <div id="history" class="section active">
+      <h2>Historia de Katana Zero</h2>
+      <p><strong>Zero:</strong> ¿Qué sabes de Chronos?</p>
+      <p>Katana Zero es un juego de acción y plataformas neo-noir desarrollado por Askiisoft y publicado por Devolver Digital en 2019. Ambientado en un mundo distópico, sigues a Zero, un asesino con habilidades para manipular el tiempo, mientras desentrañas una narrativa oscura llena de conspiraciones, trauma y Chronos, una droga experimental que otorga habilidades sobrenaturales.</p>
+      <p>La historia se desarrolla en una ciudad post-guerra, donde Zero recibe misiones de un misterioso cliente. A través de una narrativa fragmentada, se exploran temas de culpa, redención y la moralidad de la violencia. El juego combina una estética pixel-art con una banda sonora synthwave, creando una atmósfera inmersiva que recuerda al cine noir y los thrillers psicológicos.</p>
+      <div class="hidden-info">
+        <strong>Nota oculta:</strong> Chronos es una droga experimental que permite a Zero ralentizar el tiempo y prever eventos, pero tiene efectos secundarios devastadores, incluyendo alucinaciones y pérdida de memoria. Su uso está ligado a experimentos secretos del gobierno en la guerra que devastó el mundo del juego.
+      </div>
+      <button onclick="toggleTime()">Parar el Tiempo</button>
+    </div>
+    
+    <div id="characters" class="section">
+      <h2>Personajes Principales</h2>
+      <ul>
+        <li>
+          <img src="Katana-Zero.jpg" alt="Zero" class="character-img">
+          <div><strong>Zero:</strong> El protagonista, un asesino a sueldo con habilidades para manipular el tiempo gracias a la droga Chronos. Sufre de amnesia y traumas de guerra.</div>
+        </li>
+        <li>
+          <img src="loquito .jpg" alt="El Psiquiatra" class="character-img">
+          <div><strong>El Psiquiatra:</strong> Un misterioso terapeuta que administra Chronos a Zero y parece saber más sobre su pasado de lo que revela.</div>
+        </li>
+        <li>
+          <img src="gordo.jpg" alt="V" class="character-img">
+          <div><strong>V:</strong> Un antagonista carismático y sádico, involucrado en el mundo criminal y con conexiones a la conspiración principal.</div>
+        </li>
+        <li>
+          <img src="tilin 2.jpg" alt="La Niña" class="character-img">
+          <div><strong>La Niña:</strong> Una figura enigmática que aparece en visiones de Zero, representando inocencia perdida y trauma.</div>
+        </li>
+        <li>
+          <img src="tilin1.jpg" alt="El Cliente" class="character-img">
+          <div><strong>El Cliente:</strong> La voz anónima que asigna misiones a Zero, manipulándolo para sus propios fines.</div>
+        </li>
+      </ul>
+    </div>
+    
+    <div id="secrets" class="section">
+      <h2>Secretos y Easter Eggs</h2>
+      <p>En Katana Zero, hay varios secretos ocultos que enriquecen la lore:</p>
+      <ul>
+        <li><strong>Finales Alternos:</strong> Dependiendo de tus elecciones en diálogos y acciones, puedes desbloquear diferentes finales, incluyendo uno secreto donde se revela más sobre el origen de Chronos.</li>
+        <li><strong>Easter Eggs en Niveles:</strong> En algunos niveles, hay referencias a otros juegos indie, como Hotline Miami, con pósters o diálogos ocultos.</li>
+        <li><strong>Modo Speedrun:</strong> Completar el juego desbloquea un modo speedrun con desafíos adicionales y logros ocultos.</li>
+        <li><strong>Diálogos Ocultos:</strong> Interactuar repetidamente con ciertos objetos o NPCs revela lore adicional sobre la guerra y los experimentos gubernamentales.</li>
+        <li><strong>Chronos Overdose:</strong> En ciertas secuencias, abusar de la mecánica de tiempo puede desencadenar alucinaciones que revelan pistas sobre el pasado de Zero.</li>
+      </ul>
+    </div>
+  </div>
+  <audio id="bgMusic" loop src="background_music.mp3"></audio>
+  <audio id="rainSound" loop src="rain_sound.mp3"></audio>
+  <script>
+    function toggleTime() {
+      document.body.classList.toggle('time-stopped');
+      console.log(document.body.classList.contains('time-stopped') ? 'Time stopped' : 'Time resumed');
+    }
+
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.classList.add('active');
+        console.log(`Showing section: ${sectionId}`);
+      } else {
+        console.error(`Section ${sectionId} not found`);
+      }
+    }
+
+    function toggleMusic() {
+      const bgMusic = document.getElementById('bgMusic');
+      if (bgMusic.paused) {
+        bgMusic.play().catch(e => console.error('Error al reproducir la música:', e));
+      } else {
+        bgMusic.pause();
+      }
+    }
+
+    function toggleRain() {
+      const rainSound = document.getElementById('rainSound');
+      if (rainSound.paused) {
+        rainSound.play().catch(e => console.error('Error al reproducir el sonido de lluvia:', e));
+      } else {
+        rainSound.pause();
+      }
+    }
+
+    document.getElementById('rainSound').addEventListener('error', () => {
+      console.error('Error al cargar el sonido de lluvia.');
+    });
+
+    document.getElementById('bgMusic').addEventListener('error', () => {
+      console.error('Error al cargar la música de fondo.');
+    });
+
+    const canvas = document.getElementById('rainCanvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const drops = [];
+    for (let i = 0; i < 150; i++) {
+      drops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        speed: Math.random() * 5 + 3,
+        color: Math.random() > 0.5 ? '#00ff99' : '#ff0066'
+      });
+    }
+    function animateRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drops.forEach(drop => {
+        ctx.fillStyle = drop.color;
+        ctx.fillRect(drop.x, drop.y, 2, 12);
+        drop.y += drop.speed;
+        if (drop.y > canvas.height) drop.y = 0;
+      });
+      requestAnimationFrame(animateRain);
+    }
+    animateRain();
+  </script>
+</body>
+</html>
